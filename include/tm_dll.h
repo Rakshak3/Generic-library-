@@ -1,32 +1,38 @@
 #ifndef __TM_DLL__H
 #define __TM_DLL__H 123
 #include<tm_common.h>
-typedef struct __$_tm_dll_node
+typedef struct dll_node
 {
 void *ptr;
-struct __$_tm_dll_node *next;
-struct __$_tm_dll_node *previous;
-}DoublyLinkedListNode;
-typedef struct __$_tm_dll
+struct dll_node *next;
+struct dll_node *previous; 
+}DoublyLinkedListNode;   
+
+typedef struct dll
 {
-struct __$_tm_dll_node *start;
-struct __$_tm_dll_node *end;
+struct dll_node *start;
+struct dll_node *end;
 int size;
 }DoublyLinkedList;
-typedef struct __$__dll_iterator
+
+typedef struct Doubly_Linked_List_Iterator
 {
 DoublyLinkedListNode *node;
 }DoublyLinkedListIterator;
-DoublyLinkedList * createDoublyLinkedList(bool *succes);
-void addToDoublyLinkedList(DoublyLinkedList *doublyLinkedList,void *ptr,bool *success);
-void destroyDoublyLinkedList(DoublyLinkedList *doublyLinkedList);
-void insertIntoDoublyLinkedList(DoublyLinkedList *doublyLinkedList,int index,void *ptr,bool *success);
-void * removeFromDoublyLinkedList(DoublyLinkedList *doublyLinkedList,int index,bool *success);
-int getSizeOfDoublyLinkedList(DoublyLinkedList *doublyLinkedList);
-void clearDoublyLinkedList(DoublyLinkedList *doublyLinkedList);
-void appendToDoublyLinkedList(DoublyLinkedList *targetDoublyLinkedList,DoublyLinkedList *sourceDoublyLinkedList,bool *success);
-void * getFromDoublyLinkedList(DoublyLinkedList *doublyLinkedList,int index,bool *success);
-DoublyLinkedListIterator getDoublyLinkedListIterator(DoublyLinkedList *doublyLinkedList,bool *success);
-bool hasNextInDoublyLinkedList(DoublyLinkedListIterator *doublyLinkedListIterator);
-void * getNextElementFromDoublyLinkedList(DoublyLinkedListIterator *doublyLinkedListIterator,bool *success);
+
+DoublyLinkedList * createDoublyLinkedList(bool *succ);
+void destroyDoublyLinkedList(DoublyLinkedList *dll);
+int getSizeOfDoublyLinkedList(DoublyLinkedList *dll);
+void addToDoublyLinkedList(DoublyLinkedList *dll,void *ptr,bool *succ);
+void *removeFromDoublyLinkedList(DoublyLinkedList *dll,int index,bool *succ);
+void *getFromDoublyLinkedList(DoublyLinkedList *dll,int index,bool *succ);
+void insertIntoDoublyLinkedList(DoublyLinkedList *dll,int index,void *ptr,bool *succ);
+void appendToDoublyLinkedList(DoublyLinkedList *target,DoublyLinkedList *source,bool *succ);
+void clearDoublyLinkedList(DoublyLinkedList *dll);
+DoublyLinkedListIterator getDoublyLinkedList(DoublyLinkedList *dll,bool *succ);
+DoublyLinkedListIterator getRevDoublyLinkedList(DoublyLinkedList *dll,bool *succ);
+bool hasNextInDoublyLinkedList(DoublyLinkedListIterator *iter);
+bool hasPreviousInDoublyLinkedList(DoublyLinkedListIterator *iter);
+void * getNextElementFromDoublyLinkedList(DoublyLinkedListIterator *iter,bool *succ);
+void * getPreviousElementFromDoublyLinkedList(DoublyLinkedListIterator *iter,bool *succ);
 #endif

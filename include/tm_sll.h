@@ -1,31 +1,35 @@
 #ifndef __TM_SLL__H
 #define __TM_SLL__H 123
 #include<tm_common.h>
-typedef struct __$_tm_sll_node
+
+typedef struct sll_node
 {
 void *ptr;
-struct __$_tm_sll_node *next;
+struct sll_node *next;
 }SinglyLinkedListNode;
-typedef struct __$_tm_sll
+
+typedef struct sll
 {
-struct __$_tm_sll_node *start;
-struct __$_tm_sll_node *end;
+struct sll_node *start;
+struct sll_node *end;
 int size;
 }SinglyLinkedList;
-typedef struct __$__sll_iterator
+
+typedef struct SinglyLinkedListIterator
 {
 SinglyLinkedListNode *node;
 }SinglyLinkedListIterator;
-SinglyLinkedList * createSinglyLinkedList(bool *succes);
-void addToSinglyLinkedList(SinglyLinkedList *singlyLinkedList,void *ptr,bool *success);
-void destroySinglyLinkedList(SinglyLinkedList *singlyLinkedList);
-void insertIntoSinglyLinkedList(SinglyLinkedList *singlyLinkedList,int index,void *ptr,bool *success);
-void * removeFromSinglyLinkedList(SinglyLinkedList *singlyLinkedList,int index,bool *success);
-int getSizeOfSinglyLinkedList(SinglyLinkedList *singlyLinkedList);
-void clearSinglyLinkedList(SinglyLinkedList *singlyLinkedList);
-void appendToSinglyLinkedList(SinglyLinkedList *targetSinglyLinkedList,SinglyLinkedList *sourceSinglyLinkedList,bool *success);
-void * getFromSinglyLinkedList(SinglyLinkedList *singlyLinkedList,int index,bool *success);
-SinglyLinkedListIterator getSinglyLinkedListIterator(SinglyLinkedList *singlyLinkedList,bool *success);
-bool hasNextInSinglyLinkedList(SinglyLinkedListIterator *singlyLinkedListIterator);
-void * getNextElementFromSinglyLinkedList(SinglyLinkedListIterator *singlyLinkedListIterator,bool *success);
+
+SinglyLinkedList * createSinglyLinkedList(bool *success);
+void addToSinglyLinkedList(SinglyLinkedList * sll,void * ptr,bool *success);
+void clearSinglyLinkedList(SinglyLinkedList *sll);
+int getSizeOfSinglyLinkedList(SinglyLinkedList *sll);
+void * getFromSinglyLinkedList(SinglyLinkedList *sll,int index,bool *success);
+void * removeFromSinglyLinkedList(SinglyLinkedList *sll,int index,bool *success);
+void InsertIntoSinglyLinkedList(SinglyLinkedList *sll,int index,void *ptr,bool *success);
+void appendToSinglyLinkedList(SinglyLinkedList *target,SinglyLinkedList *source,bool *success);
+void destroySinglyLinkedList(SinglyLinkedList *sll);
+SinglyLinkedListIterator getSinglyLinkedListIterator(SinglyLinkedList *sll,bool *success);
+bool hasNextInSinglyLinkedList(SinglyLinkedListIterator *iter);
+void * getNextElementFromSinglyLinkedList(SinglyLinkedListIterator *iter,bool *success);
 #endif

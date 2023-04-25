@@ -1,17 +1,19 @@
 #ifndef __TM_STACK__H
 #define __TM_STACK__H 123
-#include<tm_common.h>
 #include<tm_sll.h>
-typedef struct __$__tm_stack
+#include<tm_common.h>
+
+typedef struct __$_tm_stack
 {
-SinglyLinkedList *singlyLinkedList;
+SinglyLinkedList *sll;
 }Stack;
-Stack * createStack(bool *success);
-void pushOnStack(Stack *stack,void *ptr,bool *success);
-void * popFromStack(Stack *stack,bool *success);
+
+Stack *createStack(bool *succ);
+void pushOnStack(Stack *stack,void *ptr,bool *succ);
+void *popFromStack(Stack *stack,bool *succ);
 int getSizeOfStack(Stack *stack);
-void * elementAtTopOfStack(Stack *stack,bool *success);
 bool isStackEmpty(Stack *stack);
+void *ElementAtTopOfStack(Stack *stack,bool *succ);
 void clearStack(Stack *stack);
 void destroyStack(Stack *stack);
 #endif
