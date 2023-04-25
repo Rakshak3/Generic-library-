@@ -2,169 +2,174 @@
 #define __TM_SLL__C 123
 #include<tm_sll.h>
 #include<stdlib.h>
-SinglyLinkedList * createSinglyLinkedList(bool *success)
+#include<stdio.h>
+SinglyLinkedList *createSinglyLinkedList(bool *success)
 {
-if(success) *success=false;
 SinglyLinkedList *singlyLinkedList;
+if(success)*success=false;
 singlyLinkedList=(SinglyLinkedList *)malloc(sizeof(SinglyLinkedList));
 if(singlyLinkedList==NULL) return NULL;
 singlyLinkedList->start=NULL;
 singlyLinkedList->end=NULL;
 singlyLinkedList->size=0;
-if(success) *success=true;
+if(success)*success=true;
 return singlyLinkedList;
 }
-
-void destroySinglyLinkedList(SinglyLinkedList *singlyLinkedList)
-{
-if(singlyLinkedList==NULL) return;
-clearSinglyLinkedList(singlyLinkedList);
-free(singlyLinkedList);
-}
-int getSizeOfSinglyLinkedList(SinglyLinkedList *singlyLinkedList)
-{
-if(singlyLinkedList==NULL) return 0;
-return singlyLinkedList->size;
-}
-void clearSinglyLinkedList(SinglyLinkedList *singlyLinkedList)
-{
-if(singlyLinkedList==NULL) return;
-SinglyLinkedListNode *node;
-node=singlyLinkedList->start;
-while(singlyLinkedList->start)
-{
-node=singlyLinkedList->start;
-singlyLinkedList->start=singlyLinkedList->start->next;
-free(node);
-}
-singlyLinkedList->size=0;
-}
-
-//--------------------------------------------------------------------
-
-void addToSinglyLinkedList(SinglyLinkedList *singlyLinkedList,void *ptr,bool *success)
+void addToSinglyLinkedList(SinglyLinkedList * sll,void * ptr,bool *success)
 {
 SinglyLinkedListNode *node;
-if(success) *success=false;
-if(singlyLinkedList==NULL) return;
+if(success)*success=false;
+if(sll==NULL) return;
 node=(SinglyLinkedListNode *)malloc(sizeof(SinglyLinkedListNode));
-if(node==NULL) return;
+if(node==NULL)return;
 node->ptr=ptr;
 node->next=NULL;
-if(singlyLinkedList->start==NULL)
+if(sll->start==NULL)
 {
-singlyLinkedList->start=node;
-singlyLinkedList->end=node;
+sll->start=node;
+sll->end=node;
 }
 else
 {
-singlyLinkedList->end->next=node;
-singlyLinkedList->end=node;
+sll->end->next=node;
+sll->end=node;
 }
-if(success) *success=true;
-singlyLinkedList->size++;
+sll->size++;
+if(success)*success=true;
 }
-
-void insertIntoSinglyLinkedList(SinglyLinkedList *singlyLinkedList,int index,void *ptr,bool *success)
+void clearSinglyLinkedList(SinglyLinkedList *sll)
 {
-SinglyLinkedListNode *node,*p1,*p2;
-int x;
-if(success) *success=false;
-if(singlyLinkedList==NULL) return;
-if(index<0 || index>singlyLinkedList->size) return;
-if(index==singlyLinkedList->size)
+SinglyLinkedListNode *node;
+if(sll==NULL || sll->start==NULL)return;
+node=sll->start;
+while(sll->start!=NULL)
 {
-addToSinglyLinkedList(singlyLinkedList,ptr,success);
-if(success) *success=true;
-return;
+node=sll->start;
+sll->start=sll->start->next;
+free(node);
 }
-node=(SinglyLinkedListNode *)malloc(sizeof(SinglyLinkedList));
-if(node==NULL) return;
-node->ptr=ptr;
-node->next=NULL;
-if(index==0)
+sll->size=0;
+sll->end=NULL;
+}
+int getSizeOfSinglyLinkedList(SinglyLinkedList *sll)
 {
-node->next=singlyLinkedList->start;
-singlyLinkedList->start=node;
-singlyLinkedList->size++;
-if(success) *success=true;
-return;
+if(sll==NULL || sll->start==NULL || sll->size==0) return 0;
+return sll->size;
 }
-x=0;
-p1=singlyLinkedList->start;
-while(x<index)
+void *getFromSinglyLinkedList(SinglyLinkedList *sll,int index,bool *success)
 {
-p2=p1;
-p1=p1->next;
-x++;
+int y;
+SinglyLinkedListNode *node;
+if(success)*success=false;
+if(sll==NULL || sll->start==NULL) return NULL;
+if(index<0 || index>getSizeOfSinglyLinkedList(sll)) return NULL;
+node=sll->start;
+for(y=0;y<index;y++)
+{
+node=node->next;
 }
-node->next=p1;
-p2->next=node;
-singlyLinkedList->size++;
-if(success) *success=true;
+if(success)*success=true;
+return node->ptr;
 }
-
-
-void * removeFromSinglyLinkedList(SinglyLinkedList *singlyLinkedList,int index,bool *success)
+void * removeFromSinglyLinkedList(SinglyLinkedList *sll,int index,bool *success)
 {
 void *ptr;
+int x=0;
 SinglyLinkedListNode *p1,*p2;
-int x;
-if(success) *success=false;
-if(singlyLinkedList==NULL) return NULL;
-if(index<0 || index>=singlyLinkedList->size) return NULL;
-p1=singlyLinkedList->start;
-x=0;
-while(x<index)
+if(success)*success=false;
+if(index<0 || index>sll->size)return NULL;
+if(sll==NULL || sll->start==NULL)return NULL;
+
+p1=sll->start;
+while(p1 && x<index)
 {
 p2=p1;
 p1=p1->next;
 x++;
 }
 ptr=p1->ptr;
-if(singlyLinkedList->start==p1 && singlyLinkedList->end==p1)
+if(index==0)
 {
-singlyLinkedList->start=NULL;
-singlyLinkedList->end=NULL;
-}else if(singlyLinkedList->start==p1)
-{
-singlyLinkedList->start=singlyLinkedList->start->next;
-}else if(singlyLinkedList->end==p1)
-{
-singlyLinkedList->end=p2;
-singlyLinkedList->end->next=NULL;
-}
-else
-{
-p2->next=p1->next;
-}
-if(success) *success=true;
+sll->start=sll->start->next;
 free(p1);
-singlyLinkedList->size--;
+sll->size--;
+if(success)*success=true;
 return ptr;
 }
-void appendToSinglyLinkedList(SinglyLinkedList *targetSinglyLinkedList,SinglyLinkedList *sourceSinglyLinkedList,bool *success)
+if(p1==sll->end)
 {
-SinglyLinkedListNode *s,*e,*t,*node;
-bool done;
-if(success) *success=false;
-if(targetSinglyLinkedList==NULL) return;
-if(sourceSinglyLinkedList==NULL || sourceSinglyLinkedList->size==0)
+sll->end=p2;
+p2->next==NULL;
+free(p1);
+sll->size--;
+if(success)*success=true;
+return ptr;
+}
+p2->next=p1->next;
+free(p1);
+if(success)*success=true;
+sll->size--;
+return ptr;
+}
+
+void InsertIntoSinglyLinkedList(SinglyLinkedList *sll,int index,void *ptr,bool *success)
 {
-if(success) *success=true;
+int x=0;
+SinglyLinkedListNode *t,*p1,*p2;
+if(success)*success=false;
+if(sll==NULL)return;
+if(index<0 || index>sll->size)return;
+t=(SinglyLinkedListNode *)malloc(sizeof(SinglyLinkedListNode));
+if(t==NULL)return;
+t->ptr=ptr;
+t->next=NULL;
+if(index==0)
+{
+t->next=sll->start;
+sll->start=t;
+sll->size++;
+if(success)*success=true;
+return;
+}
+else if(index==sll->size)
+{
+addToSinglyLinkedList(sll,ptr,success);
+return;
+}
+p1=sll->start;
+while(p1 && x<index)
+{
+p2=p1;
+p1=p1->next;
+x++;
+}
+t->next=p1;
+p2->next=t;
+sll->size++;
+if(success)*success=true;
+}
+void appendToSinglyLinkedList(SinglyLinkedList *target,SinglyLinkedList *source,bool *success)
+{
+int done;
+SinglyLinkedListNode *t,*s,*e,*node;
+if(success)*success=false;
+if(target==NULL)return;
+if(source==NULL || source->start==NULL)
+{
+if(success)*success=true;
 return;
 }
 s=NULL;
 e=NULL;
-t=sourceSinglyLinkedList->start;
 done=true;
+t=source->start;
 while(t!=NULL)
 {
 node=(SinglyLinkedListNode *)malloc(sizeof(SinglyLinkedListNode));
 if(node==NULL)
 {
 done=false;
-return;
+break;
 }
 node->ptr=t->ptr;
 node->next=NULL;
@@ -180,7 +185,7 @@ e=node;
 }
 t=t->next;
 }
-if(done==false)
+if(done=false)
 {
 while(s!=NULL)
 {
@@ -188,69 +193,52 @@ node=s;
 s=s->next;
 free(node);
 }
-return;
 }
-if(targetSinglyLinkedList->start==NULL)
+if(target->start==NULL)
 {
-targetSinglyLinkedList->start=s;
-targetSinglyLinkedList->end=e;
-targetSinglyLinkedList->size=sourceSinglyLinkedList->size;
+target->start=s;
+target->end=e;
+target->size=source->size;
 }
 else
 {
-targetSinglyLinkedList->end->next=s;
-targetSinglyLinkedList->end=e;
-targetSinglyLinkedList->size+=sourceSinglyLinkedList->size;
+target->end->next=s;
+target->end=e;
+target->size+=source->size;
 }
-if(success) *success=true;
+if(success)*success=true;
 }
-void * getFromSinglyLinkedList(SinglyLinkedList *singlyLinkedList,int index,bool *success)
+void destroySinglyLinkedList(SinglyLinkedList *sll)
 {
-int x;
-SinglyLinkedListNode *node;
-if(success) *success=false;
-if(singlyLinkedList==NULL) return NULL;
-if(index<0 || index>=singlyLinkedList->size) return NULL;
-x=0;
-node=singlyLinkedList->start;
-while(x<index)
-{
-node=node->next;
-x++;
+if(sll==NULL)return;
+clearSinglyLinkedList(sll);
 }
-if(success) *success=true;
-return node->ptr;
-}
-SinglyLinkedListIterator getSinglyLinkedListIterator(SinglyLinkedList *singlyLinkedList,bool *success)
+SinglyLinkedListIterator getSinglyLinkedListIterator(SinglyLinkedList *sll,bool *success)
 {
-SinglyLinkedListIterator singlyLinkedListIterator;
-singlyLinkedListIterator.node=NULL;
-if(success) *success=false;
-if(singlyLinkedList==NULL) return singlyLinkedListIterator;
-if(singlyLinkedList->start==NULL)
+SinglyLinkedListIterator iterator;
+iterator.node=NULL;
+if(sll==NULL)return iterator;
+if(sll->start==NULL)
 {
-if(success) *success=true;
-return singlyLinkedListIterator;
+if(success)*success=true;
+return iterator;
 }
-if(success) *success=true;
-singlyLinkedListIterator.node=singlyLinkedList->start;
-return singlyLinkedListIterator;
+iterator.node=sll->start;
+return iterator;
 }
-bool hasNextInSinglyLinkedList(SinglyLinkedListIterator *singlyLinkedListIterator)
+bool hasNextInSinglyLinkedList(SinglyLinkedListIterator *iterator)
 {
-if(singlyLinkedListIterator==NULL) return false;
-if(singlyLinkedListIterator->node==NULL) return false;
+if(iterator==NULL || iterator->node==NULL) return false;
 return true;
 }
-void * getNextElementFromSinglyLinkedList(SinglyLinkedListIterator *singlyLinkedListIterator,bool *success)
+void *getNextElementFromSinglyLinkedList(SinglyLinkedListIterator *iterator,bool *success)
 {
 void *ptr=NULL;
-if(success) *success=false;
-if(singlyLinkedListIterator==NULL || singlyLinkedListIterator->node==NULL) return ptr;
-ptr=singlyLinkedListIterator->node->ptr;
-singlyLinkedListIterator->node=singlyLinkedListIterator->node->next;
-if(success) *success=true;
+if(success)*success=false;
+if(iterator==NULL || iterator->node==NULL) return ptr;
+ptr=iterator->node->ptr;
+iterator->node=iterator->node->next;
+if(success)*success=true;
 return ptr;
 }
 #endif
-

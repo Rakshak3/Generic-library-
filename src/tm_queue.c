@@ -1,76 +1,85 @@
 #ifndef __TM_QUEUE__C
-#define __TM_QUEUE__C 123
-#include<tm_queue.h>
+#define __TM_QUEUE__C 1213
 #include<stdlib.h>
-Queue * createQueue(bool *success)
+#include<tm_sll.h>
+#include<stdio.h>
+#include<tm_queue.h>
+Queue *createQueue(bool *succ)
 {
 Queue *queue;
-SinglyLinkedList *singlyLinkedList;
-singlyLinkedList=createSinglyLinkedList(success);
-if(*success==false) return NULL;
+if(succ)*succ=false;
+SinglyLinkedList *sll;
+sll=createSinglyLinkedList(succ);
+if(*succ=false)return NULL;
 queue=(Queue *)malloc(sizeof(Queue));
-if(queue==NULL)
+if(sll==NULL)
 {
-destroySinglyLinkedList(singlyLinkedList);
-if(success) *success=false;
+destroySinglyLinkedList(sll);
+if(succ)*succ=false;
 return NULL;
 }
-queue->singlyLinkedList=singlyLinkedList;
-if(success) *success=true;
+queue->sll=sll;
+if(succ)*succ=true;
 return queue;
 }
-void addToQueue(Queue *queue,void *ptr,bool *success)
+void addToQueue(Queue *queue,void *ptr,bool *succ)
 {
-if(success) *success=false;
-if(queue==NULL || queue->singlyLinkedList==NULL) return;
-addToSinglyLinkedList(queue->singlyLinkedList,ptr,success);
+if(succ)*succ=false;
+if(queue==NULL || queue->sll==NULL)return;
+addToSinglyLinkedList(queue->sll,ptr,succ);
 }
-void * removeFromQueue(Queue *queue,bool *success)
+void *removeFromQueue(Queue *queue,bool *succ)
 {
 void *ptr;
-if(success) *success=false;
-if(isQueueEmpty(queue)) return NULL;
-ptr=removeFromSinglyLinkedList(queue->singlyLinkedList,0,success);
-if(success) *success=true;
+if(succ)*succ=false;
+if(queue==NULL || queue->sll==NULL)return NULL;
+ptr=removeFromSinglyLinkedList(queue->sll,0,succ);
+if(succ)*succ=true;
 return ptr;
 }
 int getSizeOfQueue(Queue *queue)
 {
-if(queue==NULL || queue->singlyLinkedList==NULL) return 0;
-return getSizeOfSinglyLinkedList(queue->singlyLinkedList);
+int x;
+if(queue==NULL) return 0;
+x=getSizeOfSinglyLinkedList(queue->sll);
+return x;
 }
-void *elementAtFrontOfQueue(Queue *queue,bool *success)
+void *ElementAtTopOfQueue(Queue *queue,bool *succ)
 {
 void *ptr;
-if(success) *success=false;
-if(queue==NULL) return NULL;
-if(queue->singlyLinkedList==NULL) return NULL;
-if(queue->singlyLinkedList->start==NULL) return NULL;
-
-
-ptr=getFromSinglyLinkedList(queue->singlyLinkedList,0,success);
-if(success) *success=true;
+if(succ)*succ=false;
+if(isQueueEmpty(queue))return NULL;
+ptr=getFromSinglyLinkedList(queue->sll,0,succ);
+if(succ)*succ=true;
 return ptr;
 }
+
+void *getElementFromQueue(Queue *queue,int index,bool *succ)
+{
+void *ptr;
+if(succ)*succ=false;
+if(isQueueEmpty(queue))return NULL;
+ptr=getFromSinglyLinkedList(queue->sll,index,succ);
+if(succ)*succ=true;
+return ptr;
+}
+
 bool isQueueEmpty(Queue *queue)
 {
-if(queue==NULL) return true;
-if(queue->singlyLinkedList==NULL) return true;
-if(queue->singlyLinkedList->start==NULL) return true;
+if(queue==NULL)return true;
+if(queue->sll==NULL)return true;
+if(queue->sll->size==0)return true;
 return false;
 }
 void clearQueue(Queue *queue)
 {
-if(queue==NULL) return;
-if(queue->singlyLinkedList==NULL) return;
-clearSinglyLinkedList(queue->singlyLinkedList);
+if(queue==NULL || queue->sll==NULL)return;
+clearSinglyLinkedList(queue->sll);
 }
 void destroyQueue(Queue *queue)
 {
-if(queue==NULL) return;
-if(queue->singlyLinkedList==NULL) return;
-destroySinglyLinkedList(queue->singlyLinkedList);
+if(queue==NULL)return;
+destroySinglyLinkedList(queue->sll);
 free(queue);
 }
 #endif
-

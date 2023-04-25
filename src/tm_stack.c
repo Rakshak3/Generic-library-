@@ -1,71 +1,74 @@
 #ifndef __TM_STACK__C
-#define __TM_STACK__C 123
-#include<tm_stack.h>
+#define __TM_STACK__C 1213
 #include<stdlib.h>
-Stack * createStack(bool *success)
+#include<tm_sll.h>
+#include<stdio.h>
+#include<tm_stack.h>
+Stack *createStack(bool *succ)
 {
 Stack *stack;
-SinglyLinkedList *singlyLinkedList;
-singlyLinkedList=createSinglyLinkedList(success);
-if(*success==false) return NULL;
+if(succ)*succ=false;
+SinglyLinkedList *sll;
+sll=createSinglyLinkedList(succ);
+if(*succ=false)return NULL;
 stack=(Stack *)malloc(sizeof(Stack));
-if(stack==NULL)
+if(sll==NULL)
 {
-destroySinglyLinkedList(singlyLinkedList);
-if(success) *success=false;
+destroySinglyLinkedList(sll);
+if(succ)*succ=false;
 return NULL;
 }
-stack->singlyLinkedList=singlyLinkedList;
-if(success) *success=true;
+stack->sll=sll;
+if(succ)*succ=true;
 return stack;
 }
-void pushOnStack(Stack *stack,void *ptr,bool *success)
+void pushOnStack(Stack *stack,void *ptr,bool *succ)
 {
-if(success) *success=false;
-if(stack==NULL || stack->singlyLinkedList==NULL) return;
-insertIntoSinglyLinkedList(stack->singlyLinkedList,0,ptr,success);
+if(succ)*succ=false;
+if(stack==NULL || stack->sll==NULL)return;
+InsertIntoSinglyLinkedList(stack->sll,0,ptr,succ);
 }
-void * popFromStack(Stack *stack,bool *success)
+void *popFromStack(Stack *stack,bool *succ)
 {
 void *ptr;
-if(success) *success=false;
-if(isStackEmpty(stack)) return NULL;
-ptr=removeFromSinglyLinkedList(stack->singlyLinkedList,0,success);
-if(success) *success=true;
+if(succ)*succ=false;
+if(stack==NULL || stack->sll==NULL)return NULL;
+ptr=removeFromSinglyLinkedList(stack->sll,0,succ);
+if(succ)*succ=true;
 return ptr;
 }
 int getSizeOfStack(Stack *stack)
 {
-if(stack==NULL || stack->singlyLinkedList==NULL) return 0;
-return getSizeOfSinglyLinkedList(stack->singlyLinkedList);
+int x;
+if(stack==NULL) return 0;
+x=getSizeOfSinglyLinkedList(stack->sll);
+return x;
 }
-void * elementAtTopOfStack(Stack *stack,bool *success)
+void *ElementAtTopOfStack(Stack *stack,bool *succ)
 {
-void *ptr=NULL;
-if(success) *success=false;
-if(isStackEmpty(stack)) return ptr;
-ptr=getFromSinglyLinkedList(stack->singlyLinkedList,0,success);
-if(success) *success=true;
+void *ptr;
+if(succ)*succ=false;
+if(isStackEmpty(stack))return NULL;
+ptr=getFromSinglyLinkedList(stack->sll,0,succ);
+if(succ)*succ=true;
 return ptr;
 }
 bool isStackEmpty(Stack *stack)
 {
-if(stack==NULL) return true;
-if(stack->singlyLinkedList==NULL) return true;
-if(getSizeOfSinglyLinkedList(stack->singlyLinkedList)==0) return true;
+if(stack==NULL)return true;
+if(stack->sll==NULL)return true;
+if(stack->sll->size==0)return true;
 return false;
 }
 void clearStack(Stack *stack)
 {
-if(stack==NULL) return;
-if(stack->singlyLinkedList==NULL) return;
-clearSinglyLinkedList(stack->singlyLinkedList);
+if(stack==NULL || stack->sll==NULL)return;
+clearSinglyLinkedList(stack->sll);
 }
 void destroyStack(Stack *stack)
 {
-if(stack==NULL) return;
-if(stack->singlyLinkedList==NULL) return;
-destroySinglyLinkedList(stack->singlyLinkedList);
+if(stack==NULL)return;
+destroySinglyLinkedList(stack->sll);
 free(stack);
 }
 #endif
